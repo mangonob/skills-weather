@@ -1,6 +1,8 @@
 import { program } from "commander";
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import qweather from "./providers/qweather";
+import { error } from "./utils";
 
 const { version, name } = JSON.parse(
 	readFileSync(path.resolve(__dirname, "../package.json"), "utf8"),
@@ -42,3 +44,13 @@ if (coordinates) {
 } else if (location) {
 	void 0;
 }
+
+async function main() {
+	await qweather({
+		location: "",
+	});
+}
+
+main().catch((e) => {
+	error(String(e));
+});
