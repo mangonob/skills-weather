@@ -1,8 +1,7 @@
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
-			QWEATHER_PRIVATE_KEY?: string;
-			QWEATHER_PRIVATE_KEY_PATH?: string;
+			SKILLS_WEATHER_CONFIG_FILE_PATH?: string;
 		}
 	}
 }

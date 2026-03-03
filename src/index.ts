@@ -1,8 +1,12 @@
 import { program } from "commander";
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import qweather from "./providers/qweather";
-import { error } from "./utils";
+import { type CLIOptions } from "./types";
+import { error, loadConfig, optionsToWeatherArgs, success } from "./utils";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const { version, name } = JSON.parse(
 	readFileSync(path.resolve(__dirname, "../package.json"), "utf8"),
@@ -13,44 +17,33 @@ program
 	.description("Get the weather for a specific location or coordinates")
 	.version(version)
 	.option("-l, --location <string>", "Location to get the weather for")
-	.option("-d, --day <number>", "", "0")
-	.option("-h, --hour <number>", "")
+	.option("-d, --days <number>", "", "0")
+	.option("-h, --hours <number>", "")
+	.option("-f, --config <string>", "Path to the config file")
 	.option(
 		"-c, --coordinates <string>",
 		"Latitude and longitude to get the weather for (format: lat,lon)",
 	);
 
-type Options = {
-	location?: string;
-	coordinates?: string;
-	day?: number;
-	hour?: number;
-};
-
 program.parse();
-const { coordinates, location } = program.opts<Options>();
 
-if (!coordinates && !location) {
-	program.error("Please provide either a location or coordinates.");
-}
-
-if (coordinates) {
-	const [latitude, longitude] = coordinates.split(",");
-	if (!latitude || !longitude) {
-		program.error(
-			"Invalid location format. Please provide latitude and longitude separated by a comma.",
-		);
-	}
-} else if (location) {
-	void 0;
-}
-
-async function main() {
-	await qweather({
-		location: "",
+process
+	.on("uncaughtException", (err) => {
+		error("Uncaught Exception: " + err);
+	})
+	.on("unhandledRejection", (reason) => {
+		error("Unhandled Rejection: " + reason);
+	})
+	.on("rejectionHandled", () => {
+		console.warn("Promise rejection handled later");
+	})
+	.on("SIGINT", () => {
+		success("SIGINT received");
+	})
+	.on("SIGTERM", () => {
+		success("SIGTERM received");
 	});
-}
 
-main().catch((e) => {
-	error(String(e));
-});
+const args = optionsToWeatherArgs(program.opts<CLIOptions>());
+const weather = await qweather(args, loadConfig());
+success(weather);
