@@ -19,6 +19,20 @@ metadata:
 
 # Weather Skill
 
+## Installation
+
+npm
+
+```bash
+npm install skills-weather
+```
+
+pnpm
+
+```bash
+pnpm add skills-weather
+```
+
 ## Parameters
 
 - `-V, --version`: output the version number
@@ -61,7 +75,7 @@ Get hourly weather forecasts:
 
 ## Supported Weather Data Providers
 
-- 和风天气 (QWeather)
+- [和风天气 (QWeather)](https://dev.qweather.com)
 
 ## Configuration File
 
