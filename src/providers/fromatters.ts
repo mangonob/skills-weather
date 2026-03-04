@@ -1,6 +1,6 @@
 import { type WeatherData } from "../models";
 import { parseNumber } from "../utils";
-import { type WeatherNow } from "./models";
+import { WeatherHours, type WeatherNow } from "./models";
 
 export function formatWeatherNow(now: WeatherNow): WeatherData {
 	const {
@@ -40,6 +40,38 @@ export function formatWeatherNow(now: WeatherNow): WeatherData {
 	};
 }
 
-export function formatWeatherDays(): unknown {
-	return 0;
+export function formatWeatherDays(hour: WeatherHours): WeatherData {
+	const {
+		fxTime,
+		temp,
+		text,
+		wind360,
+		windDir,
+		windScale,
+		windSpeed,
+		humidity,
+		pop,
+		precip,
+		cloud,
+		pressure,
+	} = hour;
+
+	const [windScaleLow, _windScaleHigh] = windScale.split("-");
+	const windScaleHigh = _windScaleHigh ?? windScaleLow;
+
+	return {
+		forecastTime: fxTime,
+		temperature: parseNumber(temp),
+		description: text,
+		windDirection: windDir,
+		windDegree: parseNumber(wind360),
+		windSpeed: parseNumber(windSpeed),
+		windScaleHigh: parseNumber(windScaleHigh),
+		windScaleLow: parseNumber(windScaleLow),
+		humidity: parseNumber(humidity),
+		precipitationProbability: parseNumber(pop),
+		precipitation: parseNumber(precip),
+		pressure: parseNumber(pressure),
+		cloudCover: parseNumber(cloud),
+	};
 }
