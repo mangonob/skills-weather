@@ -17,12 +17,18 @@ program
 	.description("Get the weather for a specific location or coordinates")
 	.version(version)
 	.option("-l, --location <string>", "Location to get the weather for")
-	.option("-d, --days <number>", "", "0")
-	.option("-h, --hours <number>", "")
+	.option(
+		"-d, --days <number>",
+		"Specify the number of days to get the weather forecast for.",
+	)
+	.option(
+		"-h, --hours <number>",
+		"Specify the number of hours to get the weather forecast for.",
+	)
 	.option("-f, --config <string>", "Path to the config file")
 	.option(
 		"-c, --coordinates <string>",
-		"Latitude and longitude to get the weather for (format: lat,lon)",
+		"Latitude and longitude to get the weather for (format: lon,lat)",
 	);
 
 program.parse();
