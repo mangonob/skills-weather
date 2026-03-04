@@ -24,13 +24,13 @@ metadata:
 npm
 
 ```bash
-npm install skills-weather
+npm install -g skills-weather
 ```
 
 pnpm
 
 ```bash
-pnpm add skills-weather
+pnpm add -g skills-weather
 ```
 
 ## Parameters
