@@ -4,10 +4,19 @@
 
 import { importPKCS8, SignJWT } from "jose";
 import { Configuration, type WeatherArgs } from "../types";
-import { ensure } from "../utils";
+import { assertType, ensure, ensurePrivateKeyHeader } from "../utils";
 import { APIProvider, IQweatherAPI, QweatherAPI, usedAPI } from "./api";
-import { CityLookupData, NowWeatherData } from "./models";
-import { formatWeatherNow } from "./fromatters";
+import {
+	formatWeatherDays,
+	formatWeatherHours,
+	formatWeatherNow,
+} from "./fromatters";
+import {
+	CityLookupData,
+	NowWeatherData,
+	WeatherDaysData,
+	WeatherHoursData,
+} from "./models";
 
 export default async function qweather(
 	args: WeatherArgs,
@@ -32,7 +41,7 @@ export default async function qweather(
 			exp: now + 3000,
 		};
 
-		const pk = await importPKCS8(privateKey, "EdDSA");
+		const pk = await importPKCS8(ensurePrivateKeyHeader(privateKey), "EdDSA");
 		const sign = await new SignJWT(payload).setProtectedHeader(header).sign(pk);
 
 		const requestHeaders = { Authorization: `Bearer ${sign}` };
@@ -137,14 +146,18 @@ async function fetchWeather(
 	if (response.status !== 200) {
 		throw `[qweather] API request failed with status ${response.status}`;
 	} else {
-		const data: NowWeatherData = await response.json();
+		const data = await response.json();
 		switch (usedAPI(apiProvider)) {
-			case "WEATHER_NOW":
+			case "WEATHER_NOW": {
+				assertType<NowWeatherData>(data);
 				return formatWeatherNow(data.now);
+			}
 			case "WEATHER_DAYS":
-				return data;
+				assertType<WeatherDaysData>(data);
+				return data.daily.slice(0, options.days).map(formatWeatherDays);
 			case "WEATHER_HOURS":
-				return data;
+				assertType<WeatherHoursData>(data);
+				return data.hourly.slice(0, options.hours).map(formatWeatherHours);
 			default:
 				return {};
 		}

@@ -6,9 +6,9 @@ export type WeatherData = {
 	/** 体感温度，单位：摄氏度 */
 	feelsLike?: number | null;
 	/** 天气状况描述 */
-	description: string;
+	description?: string;
 	/** 风向 */
-	windDirection: string;
+	windDirection?: string;
 	/** 风向角 */
 	windDegree?: number | null;
 	/** 风速，单位：公里/小时 */
@@ -32,4 +32,25 @@ export type WeatherData = {
 	forecastTime?: string;
 	/** 降雨概率，单位：百分比 */
 	precipitationProbability?: number | null;
+
+	/** 日出时间 */
+	sunriseTime?: string;
+	/** 日落时间 */
+	sunsetTime?: string;
+	/** 月升时间 */
+	moonriseTime?: string;
+	/** 月落时间 */
+	moonsetTime?: string;
+	/** 月相 */
+	moonPhase?: string;
+	/** 高温 */
+	temperatureHigh?: number | null;
+	/** 低温 */
+	temperatureLow?: number | null;
+	/** 日间天气 */
+	day?: Partial<WeatherData>;
+	/** 夜间天气 */
+	night?: Partial<WeatherData>;
+	/** 紫外线指数 */
+	uvIndex?: number | null;
 };
