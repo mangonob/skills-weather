@@ -33,3 +33,8 @@ export type CLIOptions = {
 	days?: number;
 	hours?: number;
 };
+
+export type PackageJSON = {
+	name: string;
+	version: string;
+};

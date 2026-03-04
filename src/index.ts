@@ -1,16 +1,8 @@
 import { program } from "commander";
-import { readFileSync } from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import qweather from "./providers/qweather";
 import { type CLIOptions } from "./types";
 import { error, loadConfig, optionsToWeatherArgs, success } from "./utils";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const { version, name } = JSON.parse(
-	readFileSync(path.resolve(__dirname, "../package.json"), "utf8"),
-) as { version: string; name: string };
+import { name, version } from "../package.json";
 
 program
 	.name(name)

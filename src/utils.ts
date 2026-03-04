@@ -1,6 +1,8 @@
 import { exit } from "node:process";
 import type { CLIOptions, WeatherArgs, Configuration } from "./types";
 import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 /**
  * 输出错误信息并以失败状态码终止当前进程。
@@ -31,7 +33,6 @@ export function success(json: unknown): never {
  * 配置路径优先级如下：
  * 1. `configURL` 参数
  * 2. 环境变量 `SKILLS_WEATHER_CONFIG_FILE_PATH`
- * 3. 默认路径 `skills-weather-config.json`
  *
  * @param configURL 可选的配置文件路径。
  * @returns 解析后的配置对象。
@@ -39,10 +40,11 @@ export function success(json: unknown): never {
  * @throws {SyntaxError} 当配置文件内容不是合法 JSON 时抛出错误。
  */
 export function loadConfig(configURL?: string): Configuration {
+	const __filename = fileURLToPath(import.meta.url);
 	const url =
 		configURL ??
 		process.env.SKILLS_WEATHER_CONFIG_FILE_PATH ??
-		"skills-weather-config.json";
+		path.join(path.dirname(__filename), "config.json");
 
 	if (!existsSync(url)) {
 		throw new Error(`Config file not found at path: ${url}`);

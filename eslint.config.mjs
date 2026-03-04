@@ -10,7 +10,7 @@ export default defineConfig(
 	js.configs.recommended,
 	...tseslint.configs.recommended,
 	{
-		files: ["**/*.ts"],
+		files: ["**/*.ts", "*.config.mjs"],
 		languageOptions: {
 			globals: {
 				...globals.node,
