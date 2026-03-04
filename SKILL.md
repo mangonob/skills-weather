@@ -1,7 +1,7 @@
 ---
 name: skills-weather
 description: Get the weather for a specific location or coordinates
-version: 1.0.0
+version: 1.0.3
 entry: index.js
 runtime: node
 repository: https://github.com/mangonob/skills-weather
