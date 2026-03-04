@@ -81,7 +81,7 @@ Get hourly weather forecasts:
 
 #### [和风天气](https://dev.qweather.com)
 
-##### Default config file path: `./skills-weather-config.json`
+##### Default config file path: `~/.skills-weather-config.json`
 
 ##### Example:
 
