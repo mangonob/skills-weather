@@ -5,8 +5,9 @@
 import { importPKCS8, SignJWT } from "jose";
 import { Configuration, type WeatherArgs } from "../types";
 import { ensure } from "../utils";
-import { APIProvider, IQweatherAPI, QweatherAPI } from "./api";
+import { APIProvider, IQweatherAPI, QweatherAPI, usedAPI } from "./api";
 import { CityLookupData, NowWeatherData } from "./models";
+import { formatWeatherNow } from "./fromatters";
 
 export default async function qweather(
 	args: WeatherArgs,
@@ -137,6 +138,15 @@ async function fetchWeather(
 		throw `[qweather] API request failed with status ${response.status}`;
 	} else {
 		const data: NowWeatherData = await response.json();
-		return data.now;
+		switch (usedAPI(apiProvider)) {
+			case "WEATHER_NOW":
+				return formatWeatherNow(data.now);
+			case "WEATHER_DAYS":
+				return data;
+			case "WEATHER_HOURS":
+				return data;
+			default:
+				return {};
+		}
 	}
 }

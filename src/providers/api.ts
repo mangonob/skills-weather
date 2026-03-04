@@ -49,3 +49,7 @@ export function QweatherAPI(
 		},
 	};
 }
+
+export function usedAPI(provider: APIProvider): keyof typeof API {
+	return typeof provider === "string" ? provider : provider.api;
+}

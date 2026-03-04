@@ -72,3 +72,14 @@ export function optionsToWeatherArgs(options: CLIOptions): WeatherArgs {
 		error("Please provide either a location or coordinates.");
 	}
 }
+
+export function parseNumber(raw: unknown): number | null {
+	if (typeof raw === "number") {
+		return raw;
+	} else if (typeof raw === "string") {
+		const parsed = Number(raw);
+		return isNaN(parsed) ? null : parsed;
+	} else {
+		return null;
+	}
+}
